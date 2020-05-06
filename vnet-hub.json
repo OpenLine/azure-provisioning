@@ -25,7 +25,7 @@
     },
     "variables": {
         "artifactslocation" : "https://raw.githubusercontent.com/OpenLine/azure-provisioning/master/",
-        "microsoft-resources-deployments-api-version": "2018-05-01",
+        "microsoft-resources-deployments-api-version": "2019-05-01",
         "virtual-network-api-version": "2019-04-01",
         "vnet-name": "[toUpper(concat('VNET-', parameters('customer-acronym'), '-', ResourceGroup().tags['location'], '-', padLeft(parameters('vnet-number'), 3, '0')))]",
         "ip-start": "[concat(take(split(parameters('vnet-address-prefix'),'.'),1)[0], '.', take(split(parameters('vnet-address-prefix'),'.'),2)[1])]",

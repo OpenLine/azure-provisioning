@@ -11,7 +11,7 @@
     },
     "variables": {
         "artifactslocation": "https://raw.githubusercontent.com/OpenLine/azure-provisioning/master/",
-        "microsoft-resources-deployments-api-version": "2018-05-01",
+        "microsoft-resources-deployments-api-version": "2019-05-01",
         "resourcegroup-api-version": "2019-10-01"
     },
     "resources": [
@@ -31,6 +31,9 @@
                     },
                     "resourcegroup-name": {
                         "value": "Network"
+                    },
+                    "location": {
+                        "value": "[deployment().location]"
                     }
                 }
             }
@@ -51,7 +54,11 @@
                     },
                     "resourcegroup-name": {
                         "value": "Management"
+                    },
+                    "location": {
+                        "value": "[deployment().location]"
                     }
+
                 }
             }
         }
