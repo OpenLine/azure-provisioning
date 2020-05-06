@@ -18,7 +18,7 @@
     "variables": {
         "microsoft-resources-deployments-api-version": "2018-01-01",
         "resourcegroup-api-version": "2019-10-01",
-        "location-acronym": "[if(contains(deployment().location, 'westeurope'), 'WEU', if(contains(deployment().location, 'northeurope'), 'NEU'))]",
+        "location-acronym": "[if(contains(deployment().location, 'westeurope'), 'WEU', if(contains(deployment().location, 'northeurope'), 'NEU', 'UNK'))]",
         "rg-name": "[concat('RG-', toUpper(parameters('customer-acronym')), '-', variables('location-acronym'), '-', parameters('resourcegroup-name'))]"
     },
     "resources": [
