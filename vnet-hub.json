@@ -7,21 +7,17 @@
         },
         "vnet-address-prefix": {
             "type": "string",
-            "defaultValue": "10.210.0.0/16"
+            "defaultValue": "10.210.0.0/16",
+            "metadata": {
+                "description": "The VNET address prefix. This needs to be a /16 address for this template to provison correctly."
+            }
         },
         "_artifactsLocation": {
             "type": "string",
+            "defaultValue": "https://raw.githubusercontent.com/OpenLine/azure-provisioning/master",
             "metadata": {
                 "description": "The location of resources, such as templates and DSC modules, that the template depends on"
-            },
-            "defaultValue": "https://raw.githubusercontent.com/OpenLine/azure-provisioning/master/"
-        },
-        "_artifactsLocationSasToken": {
-            "type": "securestring",
-            "metadata": {
-                "description": "Auto-generated token to access _artifactsLocation"
-            },
-            "defaultValue": ""
+            }
         }
     },
     "variables": {
@@ -45,7 +41,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('nested-templates/virtual-network.json', parameters('_artifactsLocationSasToken')))]",
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('/nested-templates/virtual-network.json'))]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -107,20 +103,10 @@
                                     "addressPrefix": "[variables('GatewaySubnet-prefix')]"
                                 }
                             }
-                            
-                           
                         ]
                     }
                 }
             }
         }
-
-
-    ],
-    "outputs": {
-        "stringOutput": {
-            "type": "string",
-            "value": "[variables('ip-start')]"
-        }
-    }
+    ]
 }
