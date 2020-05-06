@@ -13,10 +13,6 @@
             "metadata": {
                 "description": "A name for the resourcegroup that explains what it's for, examples: network, databases, application"
             }
-        },
-        "location":       {
-            "type": "string",
-            "defaultValue": "[deployment().location]"
         }
     },
     "variables": {

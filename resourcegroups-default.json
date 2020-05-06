@@ -19,6 +19,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "[variables('microsoft-resources-deployments-api-version')]",
             "name": "rg-network",
+            "location" : "[deployment().location]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -42,6 +43,7 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "[variables('microsoft-resources-deployments-api-version')]",
             "name": "rg-management",
+            "location" : "[deployment().location]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
