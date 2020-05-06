@@ -1,0 +1,126 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnet-name": {
+            "type": "string"
+        },
+        "vnet-address-prefix": {
+            "type": "string",
+            "defaultValue": "10.210.0.0/16"
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "The location of resources, such as templates and DSC modules, that the template depends on"
+            },
+            "defaultValue": "https://raw.githubusercontent.com/OpenLine/azure-provisioning/master/"
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Auto-generated token to access _artifactsLocation"
+            },
+            "defaultValue": ""
+        }
+    },
+    "variables": {
+        "microsoft-resources-deployments-api-version": "2018-01-01",
+        "virtual-network-api-version": "2019-04-01",
+        "ip-start": "[concat(take(split(parameters('vnet-address-prefix'),'.'),1)[0], '.', take(split(parameters('vnet-address-prefix'),'.'),2)[1])]",
+        "SharedServicesSubnet-prefix": "[concat(variables('ip-start'), '.1.0/24')]",
+        "CiscoManagementSubnet-prefix": "[concat(variables('ip-start'), '.200.0/24')]",
+        "CiscoDiagnosticsSubnet-prefix": "[concat(variables('ip-start'), '.201.0/24')]",
+        "CiscoInternetSubnet-prefix": "[concat(variables('ip-start'), '.202.0/24')]",
+        "CiscoInternalSubnet-prefix": "[concat(variables('ip-start'), '.203.0/24')]",
+        "AzureBastionSubnet-prefix": "[concat(variables('ip-start'), '.252.0/24')]",
+        "ApplicationGatewaySubnet-prefix": "[concat(variables('ip-start'), '.253.0/24')]",
+        "GatewaySubnet-prefix": "[concat(variables('ip-start'), '.254.0/24')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('microsoft-resources-deployments-api-version')]",
+            "name": "virtual-network-initial",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('nestedtemplates/virtual-network.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vnet-name": {
+                        "value": "[parameters('vnet-name')]"
+                    },
+                    "vnet-address-prefixes": {
+                        "value": [
+                            "[parameters('vnet-address-prefix')]"
+                        ]
+                    },
+                    "vnet-subnets": {
+                        "value": [
+                            {
+                                "name": "SharedServicesSubnet",
+                                "properties": {
+                                    "addressPrefix": "[variables('SharedServicesSubnet-prefix')]"
+                                }
+                            },
+                            {
+                                "name": "CiscoManagementSubnet",
+                                "properties": {
+                                    "addressPrefix": "[variables('CiscoManagementSubnet-prefix')]"
+                                }
+                            },
+                            {
+                                "name": "CiscoDiagnosticsSubnet",
+                                "properties": {
+                                    "addressPrefix": "[variables('CiscoDiagnosticsSubnet-prefix')]"
+                                }
+                            },
+                            {
+                                "name": "CiscoInternetSubnet",
+                                "properties": {
+                                    "addressPrefix": "[variables('CiscoInternetSubnet-prefix')]"
+                                }
+                            },
+                            {
+                                "name": "CiscoInternalSubnet",
+                                "properties": {
+                                    "addressPrefix": "[variables('CiscoInternalSubnet-prefix')]"
+                                }
+                            },
+                            {
+                                "name": "AzureBastionSubnet",
+                                "properties": {
+                                    "addressPrefix": "[variables('AzureBastionSubnet-prefix')]"
+                                }
+                            },
+                            {
+                                "name": "ApplicationGatewaySubnet",
+                                "properties": {
+                                    "addressPrefix": "[variables('ApplicationGatewaySubnet-prefix')]"
+                                }
+                            },
+                            {
+                                "name": "GatewaySubnet",
+                                "properties": {
+                                    "addressPrefix": "[variables('GatewaySubnet-prefix')]"
+                                }
+                            }
+                            
+                           
+                        ]
+                    }
+                }
+            }
+        }
+
+
+    ],
+    "outputs": {
+        "stringOutput": {
+            "type": "string",
+            "value": "[variables('ip-start')]"
+        }
+    }
+}
