@@ -32,7 +32,7 @@
                     },
                     "resourcegroup-name": {
                         "value": "Network"
-                    },
+                    }
                 }
             }
         },
