@@ -1,0 +1,46 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "customer-acronym": {
+            "type": "string",
+            "metadata": {
+                "description": "The Name of the VNET. This needs to be a /16 address for this template to provison correctly."
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "westeurope",
+            "metadata": {
+                "description": "The location of the resource group"
+            },
+            "allowedValues": [
+                "westeurope",
+                "northeurope"
+            ]
+        },
+        "resourcegroup-name": {
+            "type": "string",
+            "metadata": {
+                "description": "A name for the resourcegroup that explains what it's for, examples: network, databases, application"
+            }
+        }
+    },
+    "variables": {
+        "microsoft-resources-deployments-api-version": "2018-01-01",
+        "resourcegroup-api-version": "2019-10-01",
+        "location-acronym": "[if(contains(parameters('location'), 'westeurope'), 'WEU', if(contains(parameters('location'), 'northeurope'), 'NEU')]",
+        "rg-name": "[toUpper(concat('RG-', parameters('customer-acronym'), '-', variables('location-acronym'), '-', parameters('resourcegroup-name')))]"
+    },
+    "resources": [
+        {
+            "name": "[variables('rg-name')]",
+            "type": "Microsoft.Resources/resourceGroups",
+            "apiVersion": "[variables('resourcegroup-api-version')]",
+            "location": "[parameters('location')]",
+            "tags": {
+                "location": "[variables('location-acronym')"
+            }
+        }
+    ]
+}
