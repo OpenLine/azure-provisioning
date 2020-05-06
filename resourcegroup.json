@@ -30,7 +30,7 @@
         "microsoft-resources-deployments-api-version": "2018-01-01",
         "resourcegroup-api-version": "2019-10-01",
         "location-acronym": "[if(contains(parameters('location'), 'westeurope'), 'WEU', if(contains(parameters('location'), 'northeurope'), 'NEU'))]",
-        "rg-name": "[toUpper(concat('RG-', parameters('customer-acronym'), '-', variables('location-acronym'), '-', parameters('resourcegroup-name')))]"
+        "rg-name": "[concat('RG-', toUpper(parameters('customer-acronym')), '-', variables('location-acronym'), '-', parameters('resourcegroup-name'))]"
     },
     "resources": [
         {
