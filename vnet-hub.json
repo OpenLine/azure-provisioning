@@ -2,8 +2,18 @@
     "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "vnet-name": {
-            "type": "string"
+        "customer-acronym": {
+            "type": "string",
+            "metadata": {
+                "description": "The Name of the VNET. This needs to be a /16 address for this template to provison correctly."
+            }
+        },
+        "vnet-number": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "The Name of the VNET. This needs to be a /16 address for this template to provison correctly."
+            }
         },
         "vnet-address-prefix": {
             "type": "string",
@@ -11,18 +21,13 @@
             "metadata": {
                 "description": "The VNET address prefix. This needs to be a /16 address for this template to provison correctly."
             }
-        },
-        "_artifactsLocation": {
-            "type": "string",
-            "defaultValue": "https://raw.githubusercontent.com/OpenLine/azure-provisioning/master",
-            "metadata": {
-                "description": "The location of resources, such as templates and DSC modules, that the template depends on"
-            }
         }
     },
     "variables": {
+        "artifactslocation" : "https://raw.githubusercontent.com/OpenLine/azure-provisioning/master/",
         "microsoft-resources-deployments-api-version": "2018-01-01",
         "virtual-network-api-version": "2019-04-01",
+        "vnet-name": "[toUpper(concat('VNET-', parameters('customer-acronym'), '-', ResourceGroup().tags['location'], '-', padLeft(parameters('vnet-number'), 3, '0')))]",
         "ip-start": "[concat(take(split(parameters('vnet-address-prefix'),'.'),1)[0], '.', take(split(parameters('vnet-address-prefix'),'.'),2)[1])]",
         "SharedServicesSubnet-prefix": "[concat(variables('ip-start'), '.1.0/24')]",
         "CiscoManagementSubnet-prefix": "[concat(variables('ip-start'), '.200.0/24')]",
@@ -41,12 +46,12 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[uri(parameters('_artifactsLocation'), concat('/nested-templates/virtual-network.json'))]",
+                    "uri": "[uri(variables('artifactsLocation'), 'nested-templates/virtual-network.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
                     "vnet-name": {
-                        "value": "[parameters('vnet-name')]"
+                        "value": "[variables('vnet-name')]"
                     },
                     "vnet-address-prefixes": {
                         "value": [
