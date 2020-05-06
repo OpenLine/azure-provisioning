@@ -33,9 +33,6 @@
                     "resourcegroup-name": {
                         "value": "Network"
                     },
-                    "location": {
-                        "value": "[deployment().location]"
-                    }
                 }
             }
         },
@@ -56,9 +53,6 @@
                     },
                     "resourcegroup-name": {
                         "value": "Management"
-                    },
-                    "location": {
-                        "value": "[deployment().location]"
                     }
 
                 }
