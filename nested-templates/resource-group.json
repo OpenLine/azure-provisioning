@@ -17,18 +17,14 @@
     },
     "variables": {
         "resourcegroup-api-version": "2019-10-01",
-        "location-acronym": "[if(contains(deployment().location, 'westeurope'), 'WEU', if(contains(deployment().location, 'northeurope'), 'NEU', 'UNK'))]",
-        "rg-name": "[concat('RG-', toUpper(parameters('customer-acronym')), '-', variables('location-acronym'), '-', parameters('resourcegroup-name'))]"
+        "rg-name": "[concat(toUpper(parameters('customer-acronym')), '-', toUpper(deployment().location), '-', parameters('resourcegroup-name'))]"
     },
     "resources": [
         {
             "name": "[variables('rg-name')]",
             "type": "Microsoft.Resources/resourceGroups",
             "apiVersion": "[variables('resourcegroup-api-version')]",
-            "location": "[deployment().location]",
-            "tags": {
-                "location": "[variables('location-acronym')]"
-            }
+            "location": "[deployment().location]"
         }
     ]
 }
