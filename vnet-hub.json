@@ -4,6 +4,7 @@
     "parameters": {
         "customer-acronym": {
             "type": "string",
+            "defaultValue": "[toUpper(take(resourceGroup().name,3))]",
             "metadata": {
                 "description": "The Open Line acronym for the customer"
             }
@@ -27,7 +28,7 @@
         "artifactslocation" : "https://raw.githubusercontent.com/OpenLine/azure-provisioning/master/",
         "microsoft-resources-deployments-api-version": "2019-05-01",
         "virtual-network-api-version": "2019-04-01",
-        "vnet-name": "[toUpper(concat('VNET-', parameters('customer-acronym'), '-', ResourceGroup().tags['location'], '-', padLeft(parameters('vnet-number'), 3, '0')))]",
+        "vnet-name": "[toUpper(concat('VNET-', toUpper(parameters('customer-acronym')),'-', toUpper(resourceGroup().location), '-', padLeft(parameters('vnet-number'), 3, '0')))]",
         "ip-start": "[concat(take(split(parameters('vnet-address-prefix'),'.'),1)[0], '.', take(split(parameters('vnet-address-prefix'),'.'),2)[1])]",
         "SharedServicesSubnet-prefix": "[concat(variables('ip-start'), '.1.0/24')]",
         "CiscoManagementSubnet-prefix": "[concat(variables('ip-start'), '.200.0/24')]",
