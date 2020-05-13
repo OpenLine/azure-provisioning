@@ -1,0 +1,88 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "circuit-name": {
+            "type": "string",
+            "metadata": {
+                "description": "This is the name of the ExpressRoute circuit"
+            }
+        },
+        "bandwidthInMbps": {
+            "type": "int",
+            "metadata": {
+                "description": "This is the bandwidth in Mbps of the circuit being created. It must exactly match one of the available bandwidth offers List ExpressRoute Service Providers API call."
+            },
+            "allowedValues": [
+                50,
+                100,
+                200,
+                500,
+                1000,
+                2000,
+                5000,
+                10000
+            ]
+        },
+        "sku-tier": {
+            "type": "string",
+            "defaultValue": "Standard",
+            "allowedValues": [
+                "Standard",
+                "Premium"
+            ],
+            "metadata": {
+                "description": "Chosen SKU Tier of ExpressRoute circuit. Choose from Premium or Standard SKU tiers."
+            }
+        },
+        "sku-family": {
+            "type": "string",
+            "defaultValue": "MeteredData",
+            "allowedValues": [
+                "MeteredData",
+                "UnlimitedData"
+            ],
+            "metadata": {
+                "description": "Chosen SKU family of ExpressRoute circuit. Choose from MeteredData or UnlimitedData SKU families."
+            }
+        },
+        "allowClassicOperations": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Allow the circuit to interact with classic (RDFE) resources"
+            }
+        }
+    },
+    "variables": {
+        "serviceProviderName": "Equinix",
+        "peeringLocation": "Amsterdam"
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-06-15",
+            "type": "Microsoft.Network/expressRouteCircuits",
+            "name": "[parameters('circuitName')]",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "[concat(parameters('sku_tier'),'_', parameters('sku_family'))]",
+                "tier": "[parameters('sku_tier')]",
+                "family": "[parameters('sku_family')]"
+            },
+            "properties": {
+                "serviceProviderProperties": {
+                    "serviceProviderName": "[variables('serviceProviderName')]",
+                    "peeringLocation": "[variables('peeringLocation')]",
+                    "bandwidthInMbps": "[parameters('bandwidthInMbps')]"
+                },
+                "allowClassicOperations": "[parameters('allowClassicOperations')]"
+            }
+        }
+    ],
+    "outputs": {
+        "serviceKey": {
+            "type": "string",
+            "value": "[reference(parameters('circuitName')).serviceKey]"
+        }
+    }
+}
