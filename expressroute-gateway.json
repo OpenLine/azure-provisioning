@@ -1,0 +1,63 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "gateway-number": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "The number of the VNET, for a Hub the default is 1. The name of the VNET is being constructed based on the customer acronym, the location tag of the resourcegroup and the VNET number"
+            }
+        },
+        "vnet-name": {
+            "type": "string"
+        },
+        "gateway-sku": {
+            "type": "string",
+            "allowedValues": [
+                "ErGw1AZ",
+                "ErGw2AZ",
+                "ErGw3AZ"
+            ]
+        }
+    },
+    "variables": {
+        "artifactslocation": "https://raw.githubusercontent.com/OpenLine/azure-provisioning/master/",
+        "microsoft-resources-deployments-api-version": "2019-05-01",
+        "gateway-name": "[concat(parameters('vnet-name'),'-GW-', padLeft(parameters('gateway-number'), 3, '0')) )]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "[variables('microsoft-resources-deployments-api-version')]",
+            "name": "ExpressRoute Gateway",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(variables('artifactsLocation'), 'nested-templates/virtual-network-gateway.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vnet-name": {
+                        "value": "[parameters('vnet-name')]"
+                    },
+                    "gateway-name": {
+                        "value": [
+                            "[variables('gateway-name')]"
+                        ]
+                    },
+                    "gateway-type": {
+                        "value": [
+                            "ExpressRoute"
+                        ]
+                    },
+                    "gateway-sku": {
+                        "value": [
+                            "[parameters('gateway-sku')]"
+                        ]
+                    }
+                }
+            }
+        }
+    ]
+}

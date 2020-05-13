@@ -1,0 +1,70 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vnet-name": {
+      "type": "string"
+    },
+    "gateway-name": {
+      "type": "string"
+    },
+    "gateway-type": {
+      "type": "string"
+    },
+    "gateway-sku": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "pip-name": "[concat(parameters('gateway-name'), '-PIP')]",
+    "vnet-id": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnet-name'))]",
+    "subnet-id": "[concat(variables('vnet-id'), '/subnets/GatewaySubNet')]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2019-09-01",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('pip-name')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "apiVersion": "2020-03-01",
+      "name": "[parameters('gateway-name')]",
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('pip-name'))]"
+      ],
+      "tags": {},
+      "properties": {
+        "gatewayType": "[parameters('gateway-type')]",
+        "vpnType": "PolicyBased",
+        "enableBgp": false,
+        "activeActive": false,
+        "vpnGatewayGeneration": "None",
+        "ipConfigurations": [
+          {
+            "name": "default",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('subnet-id')]"
+              },
+              "publicIpAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('pip-name'))]"
+              }
+            }
+          }
+        ],
+        "sku": {
+          "name": "[parameters('gateway-sku')]",
+          "tier": "[parameters('gateway-sku')]"
+        }
+       
+      }
+    }
+  ]
+}
