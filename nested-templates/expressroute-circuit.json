@@ -62,7 +62,7 @@
         {
             "apiVersion": "2015-06-15",
             "type": "Microsoft.Network/expressRouteCircuits",
-            "name": "[parameters('circuitName')]",
+            "name": "[parameters('circuit-name')]",
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "[concat(parameters('sku_tier'),'_', parameters('sku_family'))]",
