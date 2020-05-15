@@ -60,7 +60,7 @@
         }
     },
     "variables": {
-        "artifactslocation": "https://raw.githubusercontent.com/OpenLine/azure-provisioning/development/",
+        "artifactslocation": "https://raw.githubusercontent.com/OpenLine/azure-provisioning/master/",
         "microsoft-resources-deployments-api-version": "2019-05-01",
         "gateway-name": "[concat(parameters('vnet-name'),'-GW-', padLeft(parameters('gateway-number'), 3, '0'))]",
         "circuit-name" : "[concat(toUpper(take(resourceGroup().name,3)),'-ER-', padLeft(parameters('gateway-number'), 3, '0'))]"
