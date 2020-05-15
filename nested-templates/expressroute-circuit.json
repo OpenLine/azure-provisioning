@@ -65,7 +65,7 @@
             "name": "[parameters('circuit-name')]",
             "location": "[resourceGroup().location]",
             "sku": {
-                "name": "[concat(parameters('sku_tier'),'_', parameters('sku_family'))]",
+                "name": "[concat(parameters('sku-tier'),'_', parameters('sku-family'))]",
                 "tier": "[parameters('sku-tier')]",
                 "family": "[parameters('sku-family')]"
             },
