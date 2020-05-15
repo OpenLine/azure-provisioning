@@ -66,8 +66,8 @@
             "location": "[resourceGroup().location]",
             "sku": {
                 "name": "[concat(parameters('sku_tier'),'_', parameters('sku_family'))]",
-                "tier": "[parameters('sku_tier')]",
-                "family": "[parameters('sku_family')]"
+                "tier": "[parameters('sku-tier')]",
+                "family": "[parameters('sku-family')]"
             },
             "properties": {
                 "serviceProviderProperties": {
