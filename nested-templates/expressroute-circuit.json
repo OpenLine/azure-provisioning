@@ -82,7 +82,7 @@
     "outputs": {
         "serviceKey": {
             "type": "string",
-            "value": "[reference(parameters('circuitName')).serviceKey]"
+            "value": "[reference(parameters('circuit-name')).serviceKey]"
         }
     }
 }
